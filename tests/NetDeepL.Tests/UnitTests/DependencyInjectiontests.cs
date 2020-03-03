@@ -4,10 +4,10 @@ using NUnit.Framework;
 namespace NetDeepL.Tests.UnitTests {
 
     [TestFixture]
-    public class DependencyInjectiontests {
+    public class DependencyInjectionTests {
 
 
-        public DependencyInjectiontests() {
+        public DependencyInjectionTests() {
 
         }
 
