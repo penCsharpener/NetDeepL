@@ -9,7 +9,6 @@ namespace NetDeepL.Tests {
 
         }
 
-        [Ignore("Test should only run with user secrets added on developers machine.")]
         [Category("Internal")]
         [Test]
         public void UserSecrets_ShouldNot_Be_Null() {
