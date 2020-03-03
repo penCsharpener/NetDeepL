@@ -1,2 +1,3 @@
 # NetDeepL
-.NET Standard wrapper around the DeepL API v2 
+
+.NET Standard wrapper for the [DeepL API v2](www.deepl.com/docs-api)
