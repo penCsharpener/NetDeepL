@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Implementations\" />
   </ItemGroup>
 
   <ItemGroup>

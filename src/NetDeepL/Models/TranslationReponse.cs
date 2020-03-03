@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetDeepL.Models
-{
-    public class TranslationReponse
-    {
-        
+﻿namespace NetDeepL.Models {
+    public class TranslationReponse {
+        public Languages DetectedSourceLanguage { get; set; }
+        public string Text { get; set; }
     }
 }
