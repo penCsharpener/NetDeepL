@@ -1,6 +1,7 @@
 ﻿using NetDeepL.Abstractions;
 using NetDeepL.Models;
 using NetDeepL.Models.Parameters;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NetDeepL.Implementations {
@@ -26,6 +27,14 @@ namespace NetDeepL.Implementations {
         }
 
         public Task<string> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters) {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<string> TranslateAsync(IEnumerable<string> text, Languages target_lang) {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<string> TranslateAsync(IEnumerable<string> text, Languages targetLanguage, TranslationRequestParameters parameters) {
             throw new System.NotImplementedException();
         }
     }
