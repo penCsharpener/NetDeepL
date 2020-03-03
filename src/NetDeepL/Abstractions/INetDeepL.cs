@@ -2,7 +2,7 @@
 using NetDeepL.Models.Parameters;
 using System.Threading.Tasks;
 
-namespace NetDeepL.Implementations {
+namespace NetDeepL.Abstractions {
     public interface INetDeepL {
         Task<string> TranslateAsync(string text, Languages target_lang);
         Task<string> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false);
