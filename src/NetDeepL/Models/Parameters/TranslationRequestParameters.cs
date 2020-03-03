@@ -2,6 +2,9 @@
 
 namespace NetDeepL.Models.Parameters {
     public class TranslationRequestParameters {
+        public Languages SourceLanguage { get; set; } = Languages.Undefined;
+        public bool SplitSentences { get; set; } = true;
+        public bool PreserveFormatting { get; set; }
         public TagHandlingOptions TagHandling { get; set; } = TagHandlingOptions.None;
         public List<string> NonSplittingTags { get; set; } = new List<string>();
         public bool OutlineDetection { get; set; }
