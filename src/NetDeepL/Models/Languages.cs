@@ -1,5 +1,7 @@
-﻿namespace NetDeepL.Models {
-    public enum Languages {
+﻿namespace NetDeepL.Models
+{
+    public enum Languages
+    {
         Undefined,
         EN,
         DE,

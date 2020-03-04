@@ -1,5 +1,7 @@
-﻿namespace NetDeepL.Models {
-    public enum TagHandlingOptions {
+﻿namespace NetDeepL.Models
+{
+    public enum TagHandlingOptions
+    {
         None,
         Xml
     }

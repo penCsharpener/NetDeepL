@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace NetDeepL.Models.Parameters {
-    public class TranslationRequestParameters {
+namespace NetDeepL.Models.Parameters
+{
+    public class TranslationRequestParameters
+    {
         public Languages SourceLanguage { get; set; } = Languages.Undefined;
         public bool SplitSentences { get; set; } = true;
         public bool PreserveFormatting { get; set; }
@@ -11,17 +13,20 @@ namespace NetDeepL.Models.Parameters {
         public List<string> SplittingTags { get; set; } = new List<string>();
         public List<string> IgnoreTags { get; set; } = new List<string>();
 
-        public TranslationRequestParameters AddNonSplittingTags(params string[] tags) {
+        public TranslationRequestParameters AddNonSplittingTags(params string[] tags)
+        {
             (NonSplittingTags ?? (NonSplittingTags = new List<string>())).AddRange(tags);
             return this;
         }
 
-        public TranslationRequestParameters AddSplittingTags(params string[] tags) {
+        public TranslationRequestParameters AddSplittingTags(params string[] tags)
+        {
             (SplittingTags ?? (SplittingTags = new List<string>())).AddRange(tags);
             return this;
         }
 
-        public TranslationRequestParameters AddIgnoreTags(params string[] tags) {
+        public TranslationRequestParameters AddIgnoreTags(params string[] tags)
+        {
             (IgnoreTags ?? (IgnoreTags = new List<string>())).AddRange(tags);
             return this;
         }

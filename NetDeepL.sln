@@ -11,10 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3E276E61-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7A9029D0-D8E4-418E-8AF5-2AD475A4F5BF}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDeepL", "src\NetDeepL\NetDeepL.csproj", "{A86D21DF-5B65-438A-A0CE-6F76DF994FF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDeepL", "src\NetDeepL\NetDeepL.csproj", "{A86D21DF-5B65-438A-A0CE-6F76DF994FF6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDeepL.Tests", "tests\NetDeepL.Tests\NetDeepL.Tests.csproj", "{376D792A-46AC-468A-B13C-9F8D37E342A7}"
 EndProject

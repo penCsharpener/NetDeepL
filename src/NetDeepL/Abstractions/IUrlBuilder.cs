@@ -1,5 +1,7 @@
-﻿namespace NetDeepL.Abstractions {
-    public interface IUrlBuilder {
+﻿namespace NetDeepL.Abstractions
+{
+    public interface IUrlBuilder
+    {
         string GetTranslateUrl();
     }
 }

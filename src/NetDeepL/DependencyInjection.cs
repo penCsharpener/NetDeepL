@@ -1,20 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 using NetDeepL.Abstractions;
 using NetDeepL.Implementations;
-using System;
-using System.Net.Http;
 
-namespace NetDeepL {
-    internal class DependencyInjection {
+namespace NetDeepL
+{
+    internal class DependencyInjection
+    {
 
         internal IServiceCollection Services { get; }
         internal IServiceProvider ServiceProvider { get; private set; }
 
-        internal DependencyInjection() {
+        internal DependencyInjection()
+        {
             Services = new ServiceCollection();
         }
 
-        private DependencyInjection AddHttpClient(double timeOut) {
+        private DependencyInjection AddHttpClient(double timeOut)
+        {
             Services.AddHttpClient(Constants.DeepLHttpClient, http => {
                 http.BaseAddress = new Uri("https://api.deepl.com");
                 http.Timeout = TimeSpan.FromMilliseconds(timeOut);
@@ -22,7 +26,8 @@ namespace NetDeepL {
             return this;
         }
 
-        private DependencyInjection WireUpServices(string apiKey, NetDeepLOptions options) {
+        private DependencyInjection WireUpServices(string apiKey, NetDeepLOptions options)
+        {
             Services.AddTransient<INetDeepL, Implementations.NetDeepL>(_ => new Implementations.NetDeepL(apiKey, options));
             Services.AddTransient<IUrlBuilder, UrlBuilder>();
             Services.AddTransient<IInternalClient, InternalClient>(c => new InternalClient(c.GetService<IHttpClientFactory>(),
@@ -31,12 +36,14 @@ namespace NetDeepL {
             return this;
         }
 
-        internal DependencyInjection Build() {
+        internal DependencyInjection Build()
+        {
             ServiceProvider = Services.BuildServiceProvider();
             return this;
         }
 
-        internal INetDeepL GetClient(string apiKey, NetDeepLOptions options) {
+        internal INetDeepL GetClient(string apiKey, NetDeepLOptions options)
+        {
             this.AddHttpClient(options.TimeOut)
                 .WireUpServices(apiKey, options)
                 .Build();

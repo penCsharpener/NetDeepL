@@ -1,10 +1,12 @@
-﻿using NetDeepL.Models;
-using NetDeepL.Models.Parameters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using NetDeepL.Models;
+using NetDeepL.Models.Parameters;
 
-namespace NetDeepL.Abstractions {
-    public interface INetDeepL {
+namespace NetDeepL.Abstractions
+{
+    public interface INetDeepL
+    {
 
         Task<Usage> GetUsage();
         Task<TranslationReponse> TranslateAsync(string text, Languages target_lang);
