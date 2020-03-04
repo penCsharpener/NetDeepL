@@ -23,10 +23,10 @@ namespace NetDeepL.Tests.IntegrationTests {
             usage.CharacterCount.Should().BeLessOrEqualTo(usage.CharacterLimit);
         }
 
-        [TestCase("Hello World!")]
+        [TestCase("Hello world!")]
         public async Task Should_Translate_English_To_German(string englishText) {
-
             var result = await _netDeepL.TranslateAsync(englishText, Languages.DE);
+            result.Should().NotBeNullOrWhiteSpace(result);
             result.Should().NotBeSameAs(englishText);
         }
     }

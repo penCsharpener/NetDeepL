@@ -1,6 +1,7 @@
 ﻿using NetDeepL.Models;
 using NetDeepL.Models.Internal;
 using System;
+using System.Linq;
 
 namespace NetDeepL.Extensions {
     internal static class InternalModelExtensions {
@@ -10,11 +11,15 @@ namespace NetDeepL.Extensions {
             return (T)Enum.Parse(typeof(T), value, true);
         }
 
-        internal static TranslationReponse ToReponse(this InternalTranslationReponse response) {
+        internal static TranslationReponse ToReponse(this TranslationElement trElement) {
             return new TranslationReponse() {
-                DetectedSourceLanguage = response.detected_source_language.ParseEnum<Languages>(),
-                Text = response.text
+                DetectedSourceLanguage = trElement.detected_source_language.ParseEnum<Languages>(),
+                Text = trElement.text
             };
+        }
+
+        internal static TranslationReponse[] ToResponses(this InternalTranslationReponse response) {
+            return response.translations.Select(x => x.ToReponse()).ToArray();
         }
 
         internal static Usage ToResponse(this InternalUsage usage) {
