@@ -1,0 +1,895 @@
+{
+	"info": {
+		"_postman_id": "224ec98b-d85b-4031-9863-efd3832a4187",
+		"name": "DeepL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "xml handling",
+			"item": [
+				{
+					"name": "get translation (XML)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "Press <i>Continue</i> to advance to the next page.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML with attributes)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "<x id=\"17\">Please welcome the participants</x> to today's meeting.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML nested)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "The firm said it had been conducting an\n<a>internal <b>investigation</b></a> for several months.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML placeholders)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "Artificial intelligence<a/> is already shaping our everyday<b></b> lives.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML structured)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "<document>\n\t<meta>\n\t\t<title>A document's title</title>\n\t</meta>\n\t<content>\n\t\t<par>This is the first sentence. Followed by a second one.</par>\n\t\t<par>This is the third sentence.</par>\n\t</content>\n</document>",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								},
+								{
+									"key": "split_sentences",
+									"value": "nonewlines",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML non-splitting)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "<par>The firm said it had been </par><par> conducting an internal investigation.</par>",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								},
+								{
+									"key": "non_splitting_tags",
+									"value": "par",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML no auto outline detection)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "<document>\n\t<meta>\n\t\t<title>A document's title</title>\n\t</meta>\n\t<content>\n\t\t<par>This is the first sentence. Followed by a second one.</par>\n\t\t<par>This is the third sentence.</par>\n\t</content>\n</document>",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								},
+								{
+									"key": "split_sentences",
+									"value": "nonewlines",
+									"type": "text"
+								},
+								{
+									"key": "outline_detection",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "splitting_tags",
+									"value": "par,title",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML split on new lines)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "<div>This is the first\nsentence.</div>",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								},
+								{
+									"key": "split_sentences",
+									"value": "nonewlines",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "outline_detection",
+									"value": "0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "splitting_tags",
+									"value": "par,title",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (XML ignore tags)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "Please open the page <x>Settings</x> to configure your system.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "tag_handling",
+									"value": "xml",
+									"type": "text"
+								},
+								{
+									"key": "split_sentences",
+									"value": "nonewlines",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "outline_detection",
+									"value": "0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "splitting_tags",
+									"value": "par,title",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "ignore_tags",
+									"value": "x",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "42f256fe-878d-4ad4-90ad-3e14420b1800",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "f994db8b-88a6-4c26-ba44-1a76aa7f2d9e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "general",
+			"item": [
+				{
+					"name": "get supported languages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}languages?auth_key={{apikey}}",
+							"host": [
+								"{{url}}languages"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get usage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}usage?auth_key={{apikey}}",
+							"host": [
+								"{{url}}usage"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "translation",
+			"item": [
+				{
+					"name": "get translation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "Hello world!",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (multiple sentences)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "The table is green. The chair is black.",
+									"type": "text"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation (large)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								},
+								{
+									"key": "text",
+									"value": "This is the first sentence.",
+									"type": "text"
+								},
+								{
+									"key": "text",
+									"value": "This is the second sentence.",
+									"type": "text"
+								},
+								{
+									"key": "text",
+									"value": "This is the third sentence.",
+									"type": "text"
+								},
+								{
+									"key": "source_lang",
+									"value": "EN",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}translate?auth_key={{apikey}}",
+							"host": [
+								"{{url}}translate"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "documents",
+			"item": [
+				{
+					"name": "uploading",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0074a76e-747e-440d-bf47-d1647b894deb",
+								"exec": [
+									"var data = pm.response.json();",
+									"pm.environment.set('last_document_id', data.document_id);",
+									"pm.environment.set('last_document_key', data.document_key);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Content-Type",
+									"value": "multipart/form-data",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/file.docx"
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}document?auth_key={{apikey}}",
+							"host": [
+								"{{url}}document"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checking translation status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "document_key",
+									"value": "{{last_document_key}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}document/{{last_document_id}}?auth_key={{apikey}}",
+							"host": [
+								"{{url}}document"
+							],
+							"path": [
+								"{{last_document_id}}"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "downloading document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "document_key",
+									"value": "{{last_document_key}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}document/{{last_document_id}}/result?auth_key={{apikey}}",
+							"host": [
+								"{{url}}document"
+							],
+							"path": [
+								"{{last_document_id}}",
+								"result"
+							],
+							"query": [
+								{
+									"key": "auth_key",
+									"value": "{{apikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

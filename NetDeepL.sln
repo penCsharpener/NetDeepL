@@ -22,6 +22,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{66B89815-11A4-46F5-AF3C-E229BA162A6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postman", "postman", "{7C7BE30B-BF07-4869-9FAC-EFF2026156A2}"
+	ProjectSection(SolutionItems) = preProject
+		postman\DeepL.postman_collection.json = postman\DeepL.postman_collection.json
+		postman\DeepL.postman_environment.json = postman\DeepL.postman_environment.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
