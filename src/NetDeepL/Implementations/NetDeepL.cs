@@ -1,4 +1,6 @@
-﻿using NetDeepL.Abstractions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NetDeepL.Abstractions;
+using NetDeepL.Extensions;
 using NetDeepL.Models;
 using NetDeepL.Models.Parameters;
 using System.Collections.Generic;
@@ -12,6 +14,10 @@ namespace NetDeepL.Implementations {
         internal NetDeepL(string apiKey, NetDeepLOptions options) {
             _apiKey = apiKey;
             _options = options;
+        }
+
+        public async Task<Usage> GetUsage() {
+            return (await GetClient().GetUsage()).ToResponse();
         }
 
         public Task<string> TranslateAsync(string text, Languages target_lang) {
@@ -37,5 +43,13 @@ namespace NetDeepL.Implementations {
         public Task<string> TranslateAsync(IEnumerable<string> text, Languages targetLanguage, TranslationRequestParameters parameters) {
             throw new System.NotImplementedException();
         }
+
+        #region Private methods
+
+        private IInternalClient GetClient() {
+            return _dep.ServiceProvider.GetService<IInternalClient>();
+        }
+
+        #endregion
     }
 }

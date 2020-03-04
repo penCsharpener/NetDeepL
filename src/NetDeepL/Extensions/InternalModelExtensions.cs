@@ -10,10 +10,17 @@ namespace NetDeepL.Extensions {
             return (T)Enum.Parse(typeof(T), value, true);
         }
 
-        internal static TranslationReponse ToReponse(this TrReponse response) {
+        internal static TranslationReponse ToReponse(this InternalTranslationReponse response) {
             return new TranslationReponse() {
                 DetectedSourceLanguage = response.detected_source_language.ParseEnum<Languages>(),
                 Text = response.text
+            };
+        }
+
+        internal static Usage ToResponse(this InternalUsage usage) {
+            return new Usage() {
+                CharacterCount = usage.character_count,
+                CharacterLimit = usage.character_limit,
             };
         }
     }

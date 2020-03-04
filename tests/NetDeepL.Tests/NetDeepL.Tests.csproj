@@ -24,8 +24,4 @@
     <ProjectReference Include="..\..\src\NetDeepL\NetDeepL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IntegrationTests\" />
-  </ItemGroup>
-
 </Project>

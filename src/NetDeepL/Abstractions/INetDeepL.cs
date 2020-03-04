@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace NetDeepL.Abstractions {
     public interface INetDeepL {
+
+        Task<Usage> GetUsage();
         Task<string> TranslateAsync(string text, Languages target_lang);
         Task<string> TranslateAsync(IEnumerable<string> text, Languages target_lang);
         Task<string> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false);
