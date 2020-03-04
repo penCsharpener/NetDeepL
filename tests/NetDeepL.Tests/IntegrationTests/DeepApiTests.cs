@@ -26,7 +26,7 @@ namespace NetDeepL.Tests.IntegrationTests {
         [TestCase("Hello world!")]
         public async Task Should_Translate_English_To_German(string englishText) {
             var result = await _netDeepL.TranslateAsync(englishText, Languages.DE);
-            result.Should().NotBeNullOrWhiteSpace(result);
+            result.Text.Should().NotBeNullOrWhiteSpace();
             result.Should().NotBeSameAs(englishText);
         }
     }

@@ -21,27 +21,27 @@ namespace NetDeepL.Implementations {
             return (await GetClient().GetUsage()).ToResponse();
         }
 
-        public async Task<string> TranslateAsync(string text, Languages target_lang) {
-            return (await GetClient().TranslateAsync(text, target_lang)).ToResponses().FirstOrDefault()?.Text;
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages target_lang) {
+            return (await GetClient().TranslateAsync(text, target_lang)).ToResponses().FirstOrDefault();
         }
 
-        public Task<string> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false) {
+        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false) {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false) {
+        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false) {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters) {
+        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters) {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> TranslateAsync(IEnumerable<string> text, Languages target_lang) {
+        public Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> text, Languages target_lang) {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> TranslateAsync(IEnumerable<string> text, Languages targetLanguage, TranslationRequestParameters parameters) {
+        public Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> text, Languages targetLanguage, TranslationRequestParameters parameters) {
             throw new System.NotImplementedException();
         }
 
