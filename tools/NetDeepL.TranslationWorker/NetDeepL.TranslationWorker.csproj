@@ -12,4 +12,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NetDeepL\NetDeepL.csproj" />
+  </ItemGroup>
+
 </Project>
