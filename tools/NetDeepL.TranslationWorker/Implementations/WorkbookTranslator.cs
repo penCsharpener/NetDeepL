@@ -40,35 +40,19 @@ namespace NetDeepL.TranslationWorker.Implementations
 
                 using (var wb = new XLWorkbook(xlsx.FullName))
                 {
-                    CheckForAlreadyTranslatedWorksheets(wb);
-
-                    foreach (IXLWorksheet ws in wb.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) == -1).ToList())
+                    try
                     {
-                        Console.WriteLine($"Beginning worksheet '{ws.Name}'");
+                        CheckForAlreadyTranslatedWorksheets(wb);
 
-                        foreach (var language in conf.LanguagesToTranslate.Split(","))
-                        {
-                            Console.WriteLine($"Beginning Language '{language}'");
-
-                            var translatedSheetName = $"{ws.Name}{DEEPL_PLACEHOLDER}" + language;
-                            var translatedSheet = wb.Worksheets.Add(translatedSheetName);
-
-                            foreach (IXLCell cell in ws.CellsUsed().Cast<IXLCell>())
-                            {
-                                var translation = await _deepL.TranslateAsync(cell.Value.ToString(), Enum.Parse<Languages>(language));
-                                Console.WriteLine($"{cell.Address} \"{cell.Value}\" => \"{translation.Text}\"");
-                                translatedSheet.Cell(cell.Address).Value = translation.Text;
-
-                                // prevent status code 429 by sending request too quickly
-                                await Task.Delay(delay);
-                            }
-                            Console.WriteLine();
-                        }
+                        await ProcessSheets(wb, conf.LanguagesToTranslate, delay);
                         Console.WriteLine();
-                    }
-                    Console.WriteLine();
 
-                    wb.Save();
+                        wb.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
                 }
             }
 
@@ -89,6 +73,42 @@ namespace NetDeepL.TranslationWorker.Implementations
                 Console.ReadLine();
                 Environment.Exit(0);
             }
+        }
+
+        private async Task ProcessSheets(IXLWorkbook workbook, string languagesToTranslate, int delay)
+        {
+
+            foreach (IXLWorksheet ws in workbook.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) == -1).ToList())
+            {
+                Console.WriteLine($"Beginning worksheet '{ws.Name}'");
+
+                foreach (var language in languagesToTranslate.Split(","))
+                {
+                    Console.WriteLine($"Beginning Language '{language}'");
+
+                    var translatedSheetName = $"{ws.Name}{DEEPL_PLACEHOLDER}" + language;
+                    var translatedSheet = workbook.Worksheets.Add(translatedSheetName);
+
+                    foreach (IXLCell cell in ws.CellsUsed().Cast<IXLCell>())
+                    {
+                        await TranslateCell(cell, translatedSheet, delay, language);
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+        }
+
+
+
+        private async Task TranslateCell(IXLCell cell, IXLWorksheet translatedSheet, int delay, string language)
+        {
+            var translation = await _deepL.TranslateAsync(cell.Value.ToString(), Enum.Parse<Languages>(language));
+            Console.WriteLine($"{cell.Address} \"{cell.Value}\" => \"{translation.Text}\"");
+            translatedSheet.Cell(cell.Address).Value = translation.Text;
+
+            // prevent status code 429 by sending request too quickly
+            await Task.Delay(delay);
         }
     }
 }

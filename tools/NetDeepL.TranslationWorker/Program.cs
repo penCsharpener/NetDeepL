@@ -11,9 +11,17 @@ namespace NetDeepL.TranslationWorker
 
         static async Task Main(string[] args)
         {
-            SetupDependencies();
-            var translator = ServiceProvider.GetService<IWorkbookTranslator>();
-            await translator.TranslateAsync();
+            try
+            {
+                SetupDependencies();
+                var translator = ServiceProvider.GetService<IWorkbookTranslator>();
+                await translator.TranslateAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
             Console.ReadLine();
         }
 
