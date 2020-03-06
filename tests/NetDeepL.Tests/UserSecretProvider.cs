@@ -5,7 +5,6 @@ namespace NetDeepL.Tests
 {
     public class UserSecretProvider
     {
-
         private readonly IConfigurationRoot _conf;
         public IConfiguration Configuration => _conf;
 
