@@ -7,7 +7,7 @@ namespace NetDeepL.TranslationWorker.Implementations
 {
     public class AppInformation : IAppInformation
     {
-        private static string _workingDir = Directory.GetCurrentDirectory();//Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        private static string _workingDir = Directory.GetCurrentDirectory();
         private static PropertyInfo[] _configFileProperties = typeof(ConfigFileRaw).GetProperties();
 
 
