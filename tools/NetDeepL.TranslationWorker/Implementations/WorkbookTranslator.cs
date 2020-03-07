@@ -1,11 +1,15 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
+using Microsoft.Extensions.DependencyInjection;
 using NetDeepL.Abstractions;
 using NetDeepL.Models;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Models;
+using Polly;
 
 namespace NetDeepL.TranslationWorker.Implementations
 {
@@ -13,14 +17,16 @@ namespace NetDeepL.TranslationWorker.Implementations
     {
         private const string DEEPL_PLACEHOLDER = "_DeepL_";
         private readonly IAppInformation _appInformation;
-        private readonly INetDeepL _deepL;
+        private INetDeepL _deepL;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IServiceProvider _serviceProvider;
 
-        public WorkbookTranslator(IAppInformation appInformation, INetDeepL deepL, IConfigFileProvider configFileProvider)
+        public WorkbookTranslator(IAppInformation appInformation, INetDeepL deepL, IConfigFileProvider configFileProvider, IServiceProvider serviceProvider)
         {
             _appInformation = appInformation;
             _deepL = deepL;
             _configFileProvider = configFileProvider;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task TranslateAsync()
@@ -127,14 +133,34 @@ namespace NetDeepL.TranslationWorker.Implementations
             var translation = cell.Text;
             if (!cell.IsHidden)
             {
-                translation = (await _deepL.TranslateAsync(cell.Text, language)).Text;
+                // prevent status code 429 by sending request too quickly
+                await Task.Delay(delay);
+                try
+                {
+                    var policy = Policy.HandleInner<SocketException>()
+                        .RetryAsync(3, async (ex, retryCount) => {
+                            await Task.Delay(delay);
+                            _deepL = _serviceProvider.GetService<INetDeepL>();
+                        })
+                        .ExecuteAsync(async () => translation = (await _deepL.TranslateAsync(cell.Text, language)).Text);
+                }
+                catch (SocketException socketEx)
+                {
+                    Console.WriteLine(socketEx.ToString());
+                }
+                catch (IOException ioEx)
+                {
+                    Console.WriteLine(ioEx.ToString());
+                }
+                catch (TaskCanceledException taskEx)
+                {
+                    Console.WriteLine(taskEx.ToString());
+                }
+
+                Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation}\"");
             }
 
-            Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation}\"");
             translatedSheet.Cell(cell.Address).Value = translation;
-
-            // prevent status code 429 by sending request too quickly
-            await Task.Delay(delay);
         }
     }
 }
