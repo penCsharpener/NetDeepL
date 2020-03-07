@@ -48,7 +48,7 @@ namespace NetDeepL.Extensions
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        internal static Dictionary<string, string> AddIf(this Dictionary<string, string> dict, bool condition, string key, string value)
+        internal static IList<KeyValuePair<string, string>> AddIf(this IList<KeyValuePair<string, string>> dict, bool condition, string key, string value)
         {
             if (condition)
             {
@@ -58,7 +58,7 @@ namespace NetDeepL.Extensions
             return dict;
         }
 
-        internal static Dictionary<string, string> AddIf(this Dictionary<string, string> dict, bool condition, string key, IList<string> values)
+        internal static IList<KeyValuePair<string, string>> AddIf(this IList<KeyValuePair<string, string>> dict, bool condition, string key, IList<string> values)
         {
             if (condition)
             {
@@ -68,7 +68,13 @@ namespace NetDeepL.Extensions
             return dict;
         }
 
-        internal static Dictionary<string, string> AddOptionalParameters(this Dictionary<string, string> dict, TranslationRequestParameters parameters)
+        internal static IList<KeyValuePair<string, string>> Add(this IList<KeyValuePair<string, string>> dict, string key, string value)
+        {
+            dict.Add(new KeyValuePair<string, string>(key, value));
+            return dict;
+        }
+
+        internal static IList<KeyValuePair<string, string>> AddOptionalParameters(this IList<KeyValuePair<string, string>> dict, TranslationRequestParameters parameters)
         {
             dict.AddIf(parameters.SourceLanguage != Languages.Undefined, TranslationParameterNames.SOURCE_LANG, parameters.SourceLanguage.ToString());
             dict.AddIf(!parameters.SplitSentences, TranslationParameterNames.SPLITTING_TAGS, parameters.SplitSentences ? "1" : "0");
@@ -84,5 +90,19 @@ namespace NetDeepL.Extensions
 
             return dict;
         }
+
+        // https://stackoverflow.com/a/4171296/6454517
+        internal static IEnumerable<Enum> GetFlags(Enum input)
+        {
+            foreach (Enum value in Enum.GetValues(input.GetType()))
+            {
+                if (input.HasFlag(value))
+                {
+                    yield return value;
+                }
+            }
+        }
+
+
     }
 }

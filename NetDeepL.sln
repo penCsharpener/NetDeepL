@@ -29,9 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postman", "postman", "{7C7B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{47F8774B-EA8F-4400-8735-AB990D86D579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDeepL.TranslationWorker", "tools\NetDeepL.TranslationWorker\NetDeepL.TranslationWorker.csproj", "{3F80E945-3C0F-4FBE-B75A-7A21725B2627}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDeepL.TranslationWorker", "tools\NetDeepL.TranslationWorker\NetDeepL.TranslationWorker.csproj", "{3F80E945-3C0F-4FBE-B75A-7A21725B2627}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDeepL.TranslationWorker.Tests", "tests\NetDeepL.TranslationWorker.Tests\NetDeepL.TranslationWorker.Tests.csproj", "{47807F0D-D4B9-47E0-8D20-032E72D381AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDeepL.TranslationWorker.Tests", "tests\NetDeepL.TranslationWorker.Tests\NetDeepL.TranslationWorker.Tests.csproj", "{47807F0D-D4B9-47E0-8D20-032E72D381AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDeepL.Tools.Shared", "tools\NetDeepL.Tools.Shared\NetDeepL.Tools.Shared.csproj", "{B6F09C54-933E-4012-85DF-E33D537A226F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,18 @@ Global
 		{47807F0D-D4B9-47E0-8D20-032E72D381AD}.Release|x64.Build.0 = Release|Any CPU
 		{47807F0D-D4B9-47E0-8D20-032E72D381AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{47807F0D-D4B9-47E0-8D20-032E72D381AD}.Release|x86.Build.0 = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|x64.Build.0 = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Debug|x86.Build.0 = Debug|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|x64.ActiveCfg = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|x64.Build.0 = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|x86.ActiveCfg = Release|Any CPU
+		{B6F09C54-933E-4012-85DF-E33D537A226F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +114,7 @@ Global
 		{376D792A-46AC-468A-B13C-9F8D37E342A7} = {7E80991F-07D6-4FF5-B472-3EB4BDB4F7B3}
 		{3F80E945-3C0F-4FBE-B75A-7A21725B2627} = {47F8774B-EA8F-4400-8735-AB990D86D579}
 		{47807F0D-D4B9-47E0-8D20-032E72D381AD} = {7E80991F-07D6-4FF5-B472-3EB4BDB4F7B3}
+		{B6F09C54-933E-4012-85DF-E33D537A226F} = {47F8774B-EA8F-4400-8735-AB990D86D579}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11388035-4431-429C-BE4C-879D461EE175}

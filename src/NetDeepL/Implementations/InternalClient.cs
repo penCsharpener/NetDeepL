@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,11 +29,16 @@ namespace NetDeepL.Implementations
             return await JsonSerializer.DeserializeAsync<InternalUsage>(responseStream);
         }
 
-        public async Task<InternalTranslationReponse> TranslateAsync(string text, Languages target_lang, TranslationRequestParameters parameters = null)
+        public async Task<InternalTranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters = null)
         {
-            var dict = new Dictionary<string, string>();
+            if (targetLanguage == Languages.Undefined)
+            {
+                throw new ArgumentException("Target language cannot be undefined.");
+            }
+
+            var dict = new List<KeyValuePair<string, string>>();
             dict.Add(TranslationParameterNames.TEXT, text);
-            dict.Add(TranslationParameterNames.TARGET_LANG, target_lang.ToString());
+            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToString());
             if (parameters != null)
             {
                 dict.AddOptionalParameters(parameters);
@@ -43,14 +49,19 @@ namespace NetDeepL.Implementations
             return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
         }
 
-        public async Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages target_lang, TranslationRequestParameters parameters = null)
+        public async Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages targetLanguage, TranslationRequestParameters parameters = null)
         {
-            var dict = new Dictionary<string, string>();
+            if (targetLanguage == Languages.Undefined)
+            {
+                throw new ArgumentException("Target language cannot be undefined.");
+            }
+
+            var dict = new List<KeyValuePair<string, string>>();
             foreach (var text in texts)
             {
                 dict.Add(TranslationParameterNames.TEXT, text);
             }
-            dict.Add(TranslationParameterNames.TARGET_LANG, target_lang.ToString());
+            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToString());
             if (parameters != null)
             {
                 dict.AddOptionalParameters(parameters);
@@ -61,11 +72,12 @@ namespace NetDeepL.Implementations
             return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
         }
 
-        private HttpRequestMessage GetPostRequestObject(string url, Dictionary<string, string> dict)
+        private HttpRequestMessage GetPostRequestObject(string url, IList<KeyValuePair<string, string>> dict)
         {
             var req = new HttpRequestMessage(HttpMethod.Post, url) {
                 Content = new FormUrlEncodedContent(dict)
             };
+
             req.Content.Headers.Clear();
             req.Content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             return req;

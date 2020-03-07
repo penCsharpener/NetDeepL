@@ -9,7 +9,7 @@ namespace NetDeepL.Abstractions
     internal interface IInternalClient
     {
         Task<InternalUsage> GetUsage();
-        Task<InternalTranslationReponse> TranslateAsync(string text, Languages target_lang, TranslationRequestParameters parameters = null);
-        Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages target_lang, TranslationRequestParameters parameters = null);
+        Task<InternalTranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters = null);
+        Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages targetLanguage, TranslationRequestParameters parameters = null);
     }
 }
