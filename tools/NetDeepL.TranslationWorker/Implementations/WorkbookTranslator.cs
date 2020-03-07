@@ -100,19 +100,23 @@ namespace NetDeepL.TranslationWorker.Implementations
                     var langEnum = Enum.Parse<Languages>(language);
                     Console.WriteLine($"Language '{language}'");
 
-                    var translatedSheet = workbook.Worksheets.Add($"{ws.Name}{DEEPL_PLACEHOLDER}{language}");
-
                     var usedCells = ws.CellsUsed().Cast<IXLCell>()
                                                   .Where(x => x.Value != null)
                                                   .Select(x => new ExcelCell(x))
                                                   .ToList();
 
-                    foreach (var cell in usedCells)
+                    // don't create new sheet for sheets that are empty
+                    if (usedCells.Count > 0)
                     {
-                        await TranslateCell(cell, translatedSheet, delay, langEnum);
-                    }
+                        var translatedSheet = workbook.Worksheets.Add($"{ws.Name}{DEEPL_PLACEHOLDER}{language}");
 
-                    Console.WriteLine();
+                        foreach (var cell in usedCells)
+                        {
+                            await TranslateCell(cell, translatedSheet, delay, langEnum);
+                        }
+
+                        Console.WriteLine();
+                    }
                 }
                 Console.WriteLine();
             }
@@ -120,9 +124,14 @@ namespace NetDeepL.TranslationWorker.Implementations
 
         private async Task TranslateCell(ExcelCell cell, IXLWorksheet translatedSheet, int delay, Languages language)
         {
-            var translation = await _deepL.TranslateAsync(cell.Text, language);
-            Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation.Text}\"");
-            translatedSheet.Cell(cell.Address).Value = translation.Text;
+            var translation = cell.Text;
+            if (!cell.IsHidden)
+            {
+                translation = (await _deepL.TranslateAsync(cell.Text, language)).Text;
+            }
+
+            Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation}\"");
+            translatedSheet.Cell(cell.Address).Value = translation;
 
             // prevent status code 429 by sending request too quickly
             await Task.Delay(delay);

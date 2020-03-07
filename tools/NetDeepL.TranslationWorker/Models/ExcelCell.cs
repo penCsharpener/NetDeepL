@@ -12,6 +12,7 @@ namespace NetDeepL.TranslationWorker.Models
         }
 
         public string Text => _cell.Value?.ToString();
+        public bool IsHidden => _cell.WorksheetColumn().IsHidden || _cell.WorksheetRow().IsHidden;
         public IXLAddress Address => _cell.Address;
     }
 }
