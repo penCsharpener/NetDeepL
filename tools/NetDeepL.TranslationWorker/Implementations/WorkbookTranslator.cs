@@ -20,6 +20,7 @@ namespace NetDeepL.TranslationWorker.Implementations
         private INetDeepL _deepL;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IServiceProvider _serviceProvider;
+        private Languages _sourceLanguage;
 
         public WorkbookTranslator(IAppInformation appInformation, INetDeepL deepL, IConfigFileProvider configFileProvider, IServiceProvider serviceProvider)
         {
@@ -27,11 +28,13 @@ namespace NetDeepL.TranslationWorker.Implementations
             _deepL = deepL;
             _configFileProvider = configFileProvider;
             _serviceProvider = serviceProvider;
+
         }
 
         public async Task TranslateAsync()
         {
             var conf = await _configFileProvider.GetConfig();
+            _sourceLanguage = Enum.Parse<Languages>(conf.SourceLanguage);
             var delay = int.Parse(conf.DelayMilliseconds);
 
             var usageBefore = await _deepL.GetUsage();
@@ -137,12 +140,17 @@ namespace NetDeepL.TranslationWorker.Implementations
                 await Task.Delay(delay);
                 try
                 {
-                    var policy = Policy.HandleInner<SocketException>()
-                        .RetryAsync(3, async (ex, retryCount) => {
+                    translation = await Policy.HandleInner<SocketException>()
+                        .RetryAsync(3, async (ex, retryCount) =>
+                        {
                             await Task.Delay(delay);
                             _deepL = _serviceProvider.GetService<INetDeepL>();
                         })
-                        .ExecuteAsync(async () => translation = (await _deepL.TranslateAsync(cell.Text, language)).Text);
+                        .ExecuteAsync(async () =>
+                        {
+                            var response = await _deepL.TranslateAsync(cell.Text, language, _sourceLanguage);
+                            return response.Text;
+                        });
                 }
                 catch (SocketException socketEx)
                 {

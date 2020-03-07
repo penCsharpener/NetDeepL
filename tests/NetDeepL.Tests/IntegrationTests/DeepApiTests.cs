@@ -36,6 +36,15 @@ namespace NetDeepL.Tests.IntegrationTests
             result.Should().NotBeSameAs(englishText);
         }
 
+        [TestCase("Hello world!")]
+        public async Task Should_Explicitely_Translate_English_To_German(string englishText)
+        {
+            var result = await _netDeepL.TranslateAsync(englishText, Languages.DE, Languages.EN);
+            result.Text.Should().NotBeNullOrWhiteSpace();
+            result.Text.Should().NotBeSameAs(englishText);
+            result.Text.Should().Be("Hallo Welt!");
+        }
+
         [Test]
         public async Task Should_Translate_Multiple_English_To_German()
         {
