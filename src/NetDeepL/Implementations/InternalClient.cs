@@ -74,7 +74,8 @@ namespace NetDeepL.Implementations
 
         private HttpRequestMessage GetPostRequestObject(string url, IList<KeyValuePair<string, string>> dict)
         {
-            var req = new HttpRequestMessage(HttpMethod.Post, url) {
+            var req = new HttpRequestMessage(HttpMethod.Post, url)
+            {
                 Content = new FormUrlEncodedContent(dict)
             };
 

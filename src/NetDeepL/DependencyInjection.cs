@@ -19,7 +19,8 @@ namespace NetDeepL
 
         private DependencyInjection AddHttpClient(double timeOut)
         {
-            Services.AddHttpClient(Constants.DeepLHttpClient, http => {
+            Services.AddHttpClient(Constants.DeepLHttpClient, http =>
+            {
                 http.BaseAddress = new Uri("https://api.deepl.com");
                 http.Timeout = TimeSpan.FromMilliseconds(timeOut);
             });

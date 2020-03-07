@@ -12,7 +12,8 @@ namespace NetDeepL.TranslationWorker
             services.AddSingleton<IConfigFileProvider, ConfigFileProvider>();
             services.AddSingleton<IAppInformation, AppInformation>();
             services.AddSingleton<IWorkbookTranslator, WorkbookTranslator>();
-            services.AddSingleton(sp => {
+            services.AddSingleton(sp =>
+            {
                 var configProvider = sp.GetService<IConfigFileProvider>();
                 if (configProvider.CreateTemplate().Result)
                 {

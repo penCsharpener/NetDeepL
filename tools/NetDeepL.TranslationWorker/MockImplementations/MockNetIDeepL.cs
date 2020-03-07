@@ -15,7 +15,8 @@ namespace NetDeepL.TranslationWorker.MockImplementations
 
         public Task<TranslationReponse> TranslateAsync(string text, Languages targetlanguages)
         {
-            return Task.FromResult(new TranslationReponse() {
+            return Task.FromResult(new TranslationReponse()
+            {
                 DetectedSourceLanguage = Languages.Undefined,
                 Text = $"translated into {targetlanguages}"
             });
@@ -30,7 +31,8 @@ namespace NetDeepL.TranslationWorker.MockImplementations
 
         public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguages, bool splitSentences = true, bool preserveFormatting = false)
         {
-            return Task.FromResult(new TranslationReponse() {
+            return Task.FromResult(new TranslationReponse()
+            {
                 DetectedSourceLanguage = Languages.Undefined,
                 Text = $"translated into {targetLanguages}"
             });
@@ -38,7 +40,8 @@ namespace NetDeepL.TranslationWorker.MockImplementations
 
         public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguages, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false)
         {
-            return Task.FromResult(new TranslationReponse() {
+            return Task.FromResult(new TranslationReponse()
+            {
                 DetectedSourceLanguage = sourceLanguage,
                 Text = $"translated into {targetLanguages}"
             });
@@ -46,7 +49,8 @@ namespace NetDeepL.TranslationWorker.MockImplementations
 
         public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguages, TranslationRequestParameters parameters)
         {
-            return Task.FromResult(new TranslationReponse() {
+            return Task.FromResult(new TranslationReponse()
+            {
                 DetectedSourceLanguage = Languages.Undefined,
                 Text = $"translated into {targetLanguages}"
             });

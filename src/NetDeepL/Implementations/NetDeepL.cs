@@ -32,7 +32,8 @@ namespace NetDeepL.Implementations
 
         public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false)
         {
-            var conf = new TranslationRequestParameters() {
+            var conf = new TranslationRequestParameters()
+            {
                 SplitSentences = splitSentences,
                 PreserveFormatting = preserveFormatting
             };
@@ -41,7 +42,8 @@ namespace NetDeepL.Implementations
 
         public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false)
         {
-            var conf = new TranslationRequestParameters() {
+            var conf = new TranslationRequestParameters()
+            {
                 SourceLanguage = sourceLanguage,
                 SplitSentences = splitSentences,
                 PreserveFormatting = preserveFormatting

@@ -18,7 +18,8 @@ namespace NetDeepL.Extensions
 
         internal static TranslationReponse ToReponse(this TranslationElement trElement)
         {
-            return new TranslationReponse() {
+            return new TranslationReponse()
+            {
                 DetectedSourceLanguage = trElement.detected_source_language.ParseEnum<Languages>(),
                 Text = trElement.text
             };
@@ -31,7 +32,8 @@ namespace NetDeepL.Extensions
 
         internal static Usage ToResponse(this InternalUsage usage)
         {
-            return new Usage() {
+            return new Usage()
+            {
                 CharacterCount = usage.character_count,
                 CharacterLimit = usage.character_limit,
             };
