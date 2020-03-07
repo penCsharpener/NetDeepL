@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NetDeepL.Models;
 using NetDeepL.Models.Internal;
+using NetDeepL.Models.Parameters;
 
 namespace NetDeepL.Extensions
 {
@@ -33,6 +35,54 @@ namespace NetDeepL.Extensions
                 CharacterCount = usage.character_count,
                 CharacterLimit = usage.character_limit,
             };
+        }
+
+        /// <summary>
+        /// bool condition evaluates whether to make the option explicit.
+        /// The default will not be made explicite.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="condition"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        internal static Dictionary<string, string> AddIf(this Dictionary<string, string> dict, bool condition, string key, string value)
+        {
+            if (condition)
+            {
+                dict.Add(key, value);
+            }
+
+            return dict;
+        }
+
+        internal static Dictionary<string, string> AddIf(this Dictionary<string, string> dict, bool condition, string key, IList<string> values)
+        {
+            if (condition)
+            {
+                dict.Add(key, string.Join(",", values));
+            }
+
+            return dict;
+        }
+
+        internal static Dictionary<string, string> AddOptionalParameters(this Dictionary<string, string> dict, TranslationRequestParameters parameters)
+        {
+            dict.AddIf(parameters.SourceLanguage != Languages.Undefined, TranslationParameterNames.SOURCE_LANG, parameters.SourceLanguage.ToString());
+            dict.AddIf(!parameters.SplitSentences, TranslationParameterNames.SPLITTING_TAGS, parameters.SplitSentences ? "1" : "0");
+            dict.AddIf(parameters.PreserveFormatting, TranslationParameterNames.PRESERVE_FORMATTING, parameters.PreserveFormatting ? "1" : "0");
+            dict.AddIf(parameters.TagHandling != TagHandlingOptions.None, TranslationParameterNames.TAG_HANDLING, parameters.TagHandling.ToString());
+            dict.AddIf(parameters.NonSplittingTags?.Count > 0, TranslationParameterNames.NON_SPLITTING_TAGS, parameters.NonSplittingTags);
+            if (parameters.TagHandling == TagHandlingOptions.Xml)
+            {
+                dict.AddIf(!parameters.OutlineDetection, TranslationParameterNames.OUTLINE_DETECTION, parameters.OutlineDetection ? "1" : "0");
+            }
+            dict.AddIf(parameters.SplittingTags?.Count > 0, TranslationParameterNames.SPLITTING_TAGS, parameters.SplittingTags);
+            dict.AddIf(parameters.IgnoreTags?.Count > 0, TranslationParameterNames.IGNORE_TAGS, parameters.IgnoreTags);
+
+            return dict;
         }
     }
 }

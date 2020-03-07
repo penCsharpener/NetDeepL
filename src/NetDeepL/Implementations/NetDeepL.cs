@@ -25,34 +25,43 @@ namespace NetDeepL.Implementations
             return (await GetClient().GetUsage()).ToResponse();
         }
 
-        public async Task<TranslationReponse> TranslateAsync(string text, Languages target_lang)
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage)
         {
-            return (await GetClient().TranslateAsync(text, target_lang)).ToResponses().FirstOrDefault();
+            return (await GetClient().TranslateAsync(text, targetLanguage)).ToResponses().FirstOrDefault();
         }
 
-        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false)
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, bool splitSentences = true, bool preserveFormatting = false)
         {
-            throw new System.NotImplementedException();
+            var conf = new TranslationRequestParameters() {
+                SplitSentences = splitSentences,
+                PreserveFormatting = preserveFormatting
+            };
+            return (await GetClient().TranslateAsync(text, targetLanguage)).ToResponses().FirstOrDefault();
         }
 
-        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false)
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, bool splitSentences = true, bool preserveFormatting = false)
         {
-            throw new System.NotImplementedException();
+            var conf = new TranslationRequestParameters() {
+                SourceLanguage = sourceLanguage,
+                SplitSentences = splitSentences,
+                PreserveFormatting = preserveFormatting
+            };
+            return (await GetClient().TranslateAsync(text, targetLanguage, conf)).ToResponses().FirstOrDefault();
         }
 
-        public Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters)
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters)
         {
-            throw new System.NotImplementedException();
+            return (await GetClient().TranslateAsync(text, targetLanguage, parameters)).ToResponses().FirstOrDefault();
         }
 
-        public Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> text, Languages target_lang)
+        public async Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> texts, Languages targetLanguage)
         {
-            throw new System.NotImplementedException();
+            return (await GetClient().TranslateAsync(texts, targetLanguage)).ToResponses();
         }
 
-        public Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> text, Languages targetLanguage, TranslationRequestParameters parameters)
+        public async Task<TranslationReponse[]> TranslateAsync(IEnumerable<string> texts, Languages targetLanguage, TranslationRequestParameters parameters)
         {
-            throw new System.NotImplementedException();
+            return (await GetClient().TranslateAsync(texts, targetLanguage, parameters)).ToResponses();
         }
 
         #region Private methods

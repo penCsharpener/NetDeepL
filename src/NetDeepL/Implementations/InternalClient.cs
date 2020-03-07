@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using NetDeepL.Abstractions;
+using NetDeepL.Extensions;
 using NetDeepL.Models;
 using NetDeepL.Models.Internal;
 using NetDeepL.Models.Parameters;
@@ -29,9 +30,32 @@ namespace NetDeepL.Implementations
 
         public async Task<InternalTranslationReponse> TranslateAsync(string text, Languages target_lang, TranslationRequestParameters parameters = null)
         {
-            var dict = new Dictionary<string, string>(); //&text={text}&target_lang={target_lang.ToString()}
-            dict.Add("text", text);
-            dict.Add("target_lang", target_lang.ToString());
+            var dict = new Dictionary<string, string>();
+            dict.Add(TranslationParameterNames.TEXT, text);
+            dict.Add(TranslationParameterNames.TARGET_LANG, target_lang.ToString());
+            if (parameters != null)
+            {
+                dict.AddOptionalParameters(parameters);
+            }
+
+            var httpResponse = await _httpClient.SendAsync(GetPostRequestObject($"v2/translate?auth_key={_apiKey}", dict));
+            var stream = await httpResponse.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
+        }
+
+        public async Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages target_lang, TranslationRequestParameters parameters = null)
+        {
+            var dict = new Dictionary<string, string>();
+            foreach (var text in texts)
+            {
+                dict.Add(TranslationParameterNames.TEXT, text);
+            }
+            dict.Add(TranslationParameterNames.TARGET_LANG, target_lang.ToString());
+            if (parameters != null)
+            {
+                dict.AddOptionalParameters(parameters);
+            }
+
             var httpResponse = await _httpClient.SendAsync(GetPostRequestObject($"v2/translate?auth_key={_apiKey}", dict));
             var stream = await httpResponse.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
@@ -46,7 +70,6 @@ namespace NetDeepL.Implementations
             req.Content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             return req;
         }
-
     }
 
     internal class HttpHeader
