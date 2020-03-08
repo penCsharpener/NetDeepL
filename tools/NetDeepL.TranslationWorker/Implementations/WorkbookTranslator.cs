@@ -51,8 +51,8 @@ namespace NetDeepL.TranslationWorker.Implementations
                         Directory.CreateDirectory(_options.Value.OutputPath.FullName);
                     }
 
-                    var xlsxCopy = Path.Combine(_options.Value.OutputPath.FullName, xlsx.Name.Replace(".xlsx", "_NetDeepL.xlsx"));
-                    File.Copy(xlsx.FullName, xlsxCopy);
+                    var xlsxCopy = Path.Combine(_options.Value.OutputPath.FullName, xlsx.Name.Insert(xlsx.Name.Length - 5, "_NetDeepL"));
+                    File.Copy(xlsx.FullName, xlsxCopy, true);
 
                     using (var wbCopy = new XLWorkbook(xlsxCopy))
                     {
