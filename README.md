@@ -6,7 +6,7 @@
 
 very basic console app that can translate excel spreadsheets (.xlsx)
 
-* please .xlsx workbooks in same folder as application
+* place .xlsx workbooks in same folder as application
 * run application once to generate config file template if not already present
 * fill in your api key, one source language and desired target languages
 * application will loop through all .xlsx files, each worksheet, and translate each cell into all languages specified in config file
