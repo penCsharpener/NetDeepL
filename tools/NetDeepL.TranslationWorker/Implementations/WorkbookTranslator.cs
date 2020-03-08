@@ -5,10 +5,12 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NetDeepL.Abstractions;
 using NetDeepL.Models;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Models;
+using NetDeepL.TranslationWorker.Models.Config;
 using Polly;
 
 namespace NetDeepL.TranslationWorker.Implementations
@@ -18,50 +20,61 @@ namespace NetDeepL.TranslationWorker.Implementations
         private const string DEEPL_PLACEHOLDER = "_DeepL_";
         private readonly IAppInformation _appInformation;
         private INetDeepL _deepL;
-        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IOptions<ConfigFile> _options;
         private readonly IServiceProvider _serviceProvider;
-        private Languages _sourceLanguage;
 
-        public WorkbookTranslator(IAppInformation appInformation, INetDeepL deepL, IConfigFileProvider configFileProvider, IServiceProvider serviceProvider)
+        public WorkbookTranslator(IAppInformation appInformation, INetDeepL deepL, IOptions<ConfigFile> options, IServiceProvider serviceProvider)
         {
             _appInformation = appInformation;
             _deepL = deepL;
-            _configFileProvider = configFileProvider;
+            _options = options;
             _serviceProvider = serviceProvider;
-
         }
 
         public async Task TranslateAsync()
         {
-            var conf = await _configFileProvider.GetConfig();
-            _sourceLanguage = Enum.Parse<Languages>(conf.SourceLanguage);
-            var delay = int.Parse(conf.DelayMilliseconds);
-
             var usageBefore = await _deepL.GetUsage();
             Console.WriteLine();
             Console.WriteLine("Translation starting");
             Console.WriteLine($"Api usage: {usageBefore.CharacterCount}/{usageBefore.CharacterLimit}");
             Console.WriteLine();
 
-            foreach (var xlsx in _appInformation.GetExcelFiles())
+            foreach (var xlsx in _appInformation.GetExcelFiles(_options.Value.InputPath))
             {
                 Console.WriteLine();
                 Console.WriteLine($"processing file '{xlsx.Name}'");
 
                 using (var wb = new XLWorkbook(xlsx.FullName))
                 {
-                    try
+                    if (!_options.Value.OutputPath.Exists)
                     {
-                        CheckForAlreadyTranslatedWorksheets(wb);
-
-                        await ProcessSheets(wb, conf.LanguagesToTranslate, delay);
-                        Console.WriteLine();
-
-                        wb.Save();
+                        Directory.CreateDirectory(_options.Value.OutputPath.FullName);
                     }
-                    catch (Exception ex)
+
+                    var xlsxCopy = Path.Combine(_options.Value.OutputPath.FullName, xlsx.Name.Replace(".xlsx", "_NetDeepL.xlsx"));
+                    File.Copy(xlsx.FullName, xlsxCopy);
+
+                    using (var wbCopy = new XLWorkbook(xlsxCopy))
                     {
-                        Console.WriteLine(ex.ToString());
+                        try
+                        {
+                            CheckForAlreadyTranslatedWorksheets(wbCopy);
+
+                            await ProcessSheets(wbCopy, _options.Value.LanguagesToTranslate, _options.Value.DelayMilliseconds);
+                            Console.WriteLine();
+
+                            // delete original sheets in copied workbook
+                            for (int i = wbCopy.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) == -1).ToList().Count - 1; i >= 0; i--)
+                            {
+                                wbCopy.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) == -1).ToList()[i].Delete();
+                            }
+
+                            wbCopy.Save();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
                 }
             }
@@ -73,40 +86,14 @@ namespace NetDeepL.TranslationWorker.Implementations
             Console.WriteLine();
         }
 
-        private void CheckForAlreadyTranslatedWorksheets(IXLWorkbook wb)
-        {
-            var alreadyTranslated = wb.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) >= 0).ToList();
-
-            if (alreadyTranslated.Count > 0)
-            {
-                Console.WriteLine("This file was already translated. " +
-                    "Delete all the sheets with _DeepL_ in it to retranslate it.");
-                Console.WriteLine("Do you want to delete translated sheet now? y/n");
-                if (Console.ReadLine() == "y")
-                {
-                    for (int i = alreadyTranslated.Count - 1; i >= 0; i--)
-                    {
-                        Console.WriteLine($"Deleting sheet '{alreadyTranslated[i].Name}'");
-                        alreadyTranslated[i].Delete();
-                    }
-                    Console.WriteLine();
-                }
-                else
-                {
-                    Environment.Exit(0);
-                }
-            }
-        }
-
-        private async Task ProcessSheets(IXLWorkbook workbook, string languagesToTranslate, int delay)
+        private async Task ProcessSheets(IXLWorkbook workbook, Languages[] languagesToTranslate, int delay)
         {
             foreach (IXLWorksheet ws in workbook.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) == -1).ToList())
             {
                 Console.WriteLine($"Beginning worksheet '{ws.Name}'");
 
-                foreach (var language in languagesToTranslate.Split(","))
+                foreach (var language in languagesToTranslate)
                 {
-                    var langEnum = Enum.Parse<Languages>(language);
                     Console.WriteLine($"Language '{language}'");
 
                     var usedCells = ws.CellsUsed().Cast<IXLCell>()
@@ -121,7 +108,7 @@ namespace NetDeepL.TranslationWorker.Implementations
 
                         foreach (var cell in usedCells)
                         {
-                            await TranslateCell(cell, translatedSheet, delay, langEnum);
+                            await TranslateCell(cell, translatedSheet, delay, language);
                         }
 
                         Console.WriteLine();
@@ -148,7 +135,7 @@ namespace NetDeepL.TranslationWorker.Implementations
                         })
                         .ExecuteAsync(async () =>
                         {
-                            var response = await _deepL.TranslateAsync(cell.Text, language, _sourceLanguage);
+                            var response = await _deepL.TranslateAsync(cell.Text, language, _options.Value.SourceLanguage);
                             return response.Text;
                         });
                 }
@@ -169,6 +156,31 @@ namespace NetDeepL.TranslationWorker.Implementations
             }
 
             translatedSheet.Cell(cell.Address).Value = translation;
+        }
+
+        private void CheckForAlreadyTranslatedWorksheets(IXLWorkbook wb)
+        {
+            var alreadyTranslated = wb.Worksheets.Where(x => x.Name.IndexOf(DEEPL_PLACEHOLDER) >= 0).ToList();
+
+            if (alreadyTranslated.Count > 0)
+            {
+                Console.WriteLine("This file was already translated. " +
+                    "Delete all the sheets with _DeepL_ in it to retranslate it.");
+                Console.WriteLine("Do you want to delete translated sheet now? y/n");
+                if (Console.ReadLine() == "y")
+                {
+                    for (int i = alreadyTranslated.Count - 1; i >= 0; i--)
+                    {
+                        Console.WriteLine($"Deleting sheet '{alreadyTranslated[i].Name}'");
+                        alreadyTranslated[i].Delete();
+                    }
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Environment.Exit(0);
+                }
+            }
         }
     }
 }

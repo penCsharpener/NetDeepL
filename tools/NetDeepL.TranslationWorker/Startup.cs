@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Implementations;
+using NetDeepL.TranslationWorker.Models.Config;
 
 namespace NetDeepL.TranslationWorker
 {
@@ -12,6 +14,7 @@ namespace NetDeepL.TranslationWorker
             services.AddSingleton<IConfigFileProvider, ConfigFileProvider>();
             services.AddSingleton<IAppInformation, AppInformation>();
             services.AddSingleton<IWorkbookTranslator, WorkbookTranslator>();
+            services.AddTransient<IOptions<ConfigFile>, ConfigFileProvider>();
             services.AddSingleton(sp =>
             {
                 var configProvider = sp.GetService<IConfigFileProvider>();

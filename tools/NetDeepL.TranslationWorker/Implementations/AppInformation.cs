@@ -7,15 +7,23 @@ namespace NetDeepL.TranslationWorker.Implementations
 {
     public class AppInformation : IAppInformation
     {
-        private static string _workingDir = Directory.GetCurrentDirectory();
         private static PropertyInfo[] _configFileProperties = typeof(ConfigFileRaw).GetProperties();
+        private readonly string _workingDir;
 
+        public AppInformation()
+        {
+            _workingDir = Directory.GetCurrentDirectory();
+        }
 
         public PropertyInfo[] GetConfigFilePropertyInfos() => _configFileProperties;
 
-        public FileInfo[] GetExcelFiles()
+        public FileInfo[] GetExcelFiles(DirectoryInfo inputPath)
         {
-            return new DirectoryInfo(_workingDir).GetFiles("*.xlsx", SearchOption.TopDirectoryOnly);
+            if (!inputPath.Exists)
+            {
+                Directory.CreateDirectory(inputPath.FullName);
+            }
+            return new DirectoryInfo(inputPath.FullName).GetFiles("*.xlsx", SearchOption.TopDirectoryOnly);
         }
 
         public string GetWorkingDirectory() => _workingDir;

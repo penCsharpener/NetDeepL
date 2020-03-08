@@ -12,22 +12,24 @@ namespace NetDeepL.TranslationWorker.Implementations
     {
         private readonly IAppInformation _appInformation;
         private const string CONFIG_FILENAME = "config.ini";
-        private string ConfigFullFilePath;
+        private string _configFullFilePath;
+
+        public ConfigFile Value => GetOptionValues();
 
         public ConfigFileProvider(IAppInformation appInformation)
         {
             _appInformation = appInformation;
-            ConfigFullFilePath = Path.Combine(_appInformation.GetWorkingDirectory(), CONFIG_FILENAME);
+            _configFullFilePath = Path.Combine(_appInformation.GetWorkingDirectory(), CONFIG_FILENAME);
         }
 
         public async Task<bool> CreateTemplate(bool overwrite = false)
         {
-            if (File.Exists(ConfigFullFilePath) && overwrite)
+            if (File.Exists(_configFullFilePath) && overwrite)
             {
-                File.Delete(ConfigFullFilePath);
+                File.Delete(_configFullFilePath);
             }
 
-            if (!File.Exists(ConfigFullFilePath) || overwrite)
+            if (!File.Exists(_configFullFilePath) || overwrite)
             {
                 var conf = new ConfigFileRaw();
                 var lines = new List<string>();
@@ -38,7 +40,7 @@ namespace NetDeepL.TranslationWorker.Implementations
                     lines.Add($"{name}={value}");
                 }
 
-                await File.WriteAllLinesAsync(ConfigFullFilePath, lines);
+                await File.WriteAllLinesAsync(_configFullFilePath, lines);
                 return true;
             }
             return false;
@@ -47,9 +49,9 @@ namespace NetDeepL.TranslationWorker.Implementations
         public async Task<ConfigFileRaw> GetConfig()
         {
             var conf = new ConfigFileRaw();
-            if (File.Exists(ConfigFullFilePath))
+            if (File.Exists(_configFullFilePath))
             {
-                var lines = await File.ReadAllLinesAsync(ConfigFullFilePath);
+                var lines = await File.ReadAllLinesAsync(_configFullFilePath);
                 var props = _appInformation.GetConfigFilePropertyInfos();
                 foreach (var line in lines)
                 {
@@ -92,6 +94,11 @@ namespace NetDeepL.TranslationWorker.Implementations
                 Console.ReadLine();
                 Environment.Exit(0);
             }
+        }
+
+        public ConfigFile GetOptionValues()
+        {
+            return new ConfigFile(GetConfig().Result);
         }
     }
 }

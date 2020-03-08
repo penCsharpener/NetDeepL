@@ -8,6 +8,6 @@ namespace NetDeepL.TranslationWorker.Abstractions
         PropertyInfo[] GetConfigFilePropertyInfos();
         string GetWorkingDirectory();
 
-        FileInfo[] GetExcelFiles();
+        FileInfo[] GetExcelFiles(DirectoryInfo inputPath);
     }
 }
