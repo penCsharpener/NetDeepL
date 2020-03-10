@@ -25,6 +25,7 @@ namespace NetDeepL.TranslationWorker
                     Environment.Exit(0);
                 }
                 var conf = configProvider.GetConfig().Result;
+                configProvider.ValidateConfigFile().GetAwaiter().GetResult();
                 return NetDeepL.Implementations.NetDeepL.CreateClient(conf.DeepLApiKey, new NetDeepLOptions());
             });
         }

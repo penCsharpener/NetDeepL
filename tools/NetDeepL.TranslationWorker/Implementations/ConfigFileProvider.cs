@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NetDeepL.Models;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Models.Config;
 
@@ -78,19 +79,49 @@ namespace NetDeepL.TranslationWorker.Implementations
 
         public async Task ValidateConfigFile()
         {
-            var conf = await GetConfig();
+            var rawConf = await GetConfig();
+            var conf = new ConfigFile(rawConf);
             var configFileInvalid = false;
-            conf.SourceLanguage = conf.SourceLanguage.ToUpper();
-            conf.LanguagesToTranslate = string.Join(",", conf.LanguagesToTranslate.ToUpper().Split(",").Distinct());
 
-            if (conf.SourceLanguage.Length != 2)
+            if (conf.SourceLanguage == Languages.Undefined)
             {
-                Console.WriteLine("Check your source language. Only one source language is allowed and it must be two letter.");
+                Console.WriteLine("Check your source language. You selection is not supported.");
                 configFileInvalid = true;
+            }
+
+            if (conf.LanguagesToTranslate.Any(x => x == Languages.Undefined))
+            {
+                Console.WriteLine("Check your target language. One or more are not supported.");
+                configFileInvalid = true;
+            }
+
+            if (conf.DeepLApiKey == Guid.Empty.ToString())
+            {
+                Console.WriteLine("It appears you have not set a valid api key. Please check your config file.");
+                configFileInvalid = true;
+            }
+
+            if (!conf.InputPath.Exists)
+            {
+                Console.WriteLine("Your specified input directory does not exist. Do you want to create it now? y/n");
+                if (Console.ReadKey().Key == ConsoleKey.Y)
+                {
+                    Directory.CreateDirectory(conf.InputPath.FullName);
+                }
+            }
+
+            if (!conf.OutputPath.Exists)
+            {
+                Console.WriteLine("Your specified output directory does not exist. Do you want to create it now? y/n");
+                if (Console.ReadKey().Key == ConsoleKey.Y)
+                {
+                    Directory.CreateDirectory(conf.OutputPath.FullName);
+                }
             }
 
             if (configFileInvalid)
             {
+                Console.WriteLine("There were errors in your configuration. Please correct them and restart the tool.");
                 Console.ReadLine();
                 Environment.Exit(0);
             }
