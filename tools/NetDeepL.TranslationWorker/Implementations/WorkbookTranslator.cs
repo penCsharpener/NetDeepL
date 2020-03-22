@@ -120,42 +120,50 @@ namespace NetDeepL.TranslationWorker.Implementations
 
         private async Task TranslateCell(ExcelCell cell, IXLWorksheet translatedSheet, int delay, Languages language)
         {
+            translatedSheet.Cell(cell.Address).Style = cell.WrappedCell.Style;
+            translatedSheet.Cell(cell.Address).FormulaA1 = cell.WrappedCell.FormulaA1;
+            translatedSheet.Cell(cell.Address).FormulaR1C1 = cell.WrappedCell.FormulaR1C1;
+            translatedSheet.Cell(cell.Address).FormulaReference = cell.WrappedCell.FormulaReference;
+
             var translation = cell.Text;
-            if (!cell.IsHidden)
+            if (!cell.WrappedCell.HasFormula)
             {
-                // prevent status code 429 by sending request too quickly
-                await Task.Delay(delay);
-                try
+                if (!cell.IsHidden)
                 {
-                    translation = await Policy.HandleInner<SocketException>()
-                        .RetryAsync(3, async (ex, retryCount) =>
-                        {
-                            await Task.Delay(delay);
-                            _deepL = _serviceProvider.GetService<INetDeepL>();
-                        })
-                        .ExecuteAsync(async () =>
-                        {
-                            var response = await _deepL.TranslateAsync(cell.Text, language, _options.Value.SourceLanguage);
-                            return response.Text;
-                        });
-                }
-                catch (SocketException socketEx)
-                {
-                    Console.WriteLine(socketEx.ToString());
-                }
-                catch (IOException ioEx)
-                {
-                    Console.WriteLine(ioEx.ToString());
-                }
-                catch (TaskCanceledException taskEx)
-                {
-                    Console.WriteLine(taskEx.ToString());
+                    // prevent status code 429 by sending request too quickly
+                    await Task.Delay(delay);
+                    try
+                    {
+                        translation = await Policy.HandleInner<SocketException>()
+                            .RetryAsync(3, async (ex, retryCount) =>
+                            {
+                                await Task.Delay(delay);
+                                _deepL = _serviceProvider.GetService<INetDeepL>();
+                            })
+                            .ExecuteAsync(async () =>
+                            {
+                                var response = await _deepL.TranslateAsync(cell.Text, language, _options.Value.SourceLanguage);
+                                return response.Text;
+                            });
+                    }
+                    catch (SocketException socketEx)
+                    {
+                        Console.WriteLine(socketEx.ToString());
+                    }
+                    catch (IOException ioEx)
+                    {
+                        Console.WriteLine(ioEx.ToString());
+                    }
+                    catch (TaskCanceledException taskEx)
+                    {
+                        Console.WriteLine(taskEx.ToString());
+                    }
+
+                    Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation}\"");
                 }
 
-                Console.WriteLine($"{cell.Address} \"{cell.Text}\" => \"{translation}\"");
+                translatedSheet.Cell(cell.Address).Value = translation;
             }
-
-            translatedSheet.Cell(cell.Address).Value = translation;
         }
 
         private void CheckForAlreadyTranslatedWorksheets(IXLWorkbook wb)
