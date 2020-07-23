@@ -9,5 +9,6 @@ namespace NetDeepL.TranslationWorker.Abstractions
         Task<bool> CreateTemplate(bool overwrite = false);
         Task<ConfigFileRaw> GetConfig();
         Task ValidateConfigFile();
+        ConfigFile GetOptionValues();
     }
 }

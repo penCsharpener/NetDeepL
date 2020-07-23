@@ -18,5 +18,6 @@ namespace NetDeepL.TranslationWorker.Models.Config
         public string DelayMilliseconds { get; set; } = "500 # 1 second = 1000 millisecond, if this value is too low DeepL could response with code 429";
         public string InputPath { get; set; }
         public string OutputPath { get; set; }
+        public string TimeOutSeconds { get; set; } = "60";
     }
 }

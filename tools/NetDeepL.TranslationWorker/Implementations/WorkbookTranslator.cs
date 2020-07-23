@@ -92,9 +92,9 @@ namespace NetDeepL.TranslationWorker.Implementations
             {
                 Console.WriteLine($"Beginning worksheet '{ws.Name}'");
 
-                foreach (var language in languagesToTranslate)
+                foreach (var targetLang in languagesToTranslate)
                 {
-                    Console.WriteLine($"Language '{language}'");
+                    Console.WriteLine($"Language '{targetLang}'");
 
                     var usedCells = ws.CellsUsed().Cast<IXLCell>()
                                                   .Where(x => x.Value != null)
@@ -104,11 +104,11 @@ namespace NetDeepL.TranslationWorker.Implementations
                     // don't create new sheet for sheets that are empty
                     if (usedCells.Count > 0)
                     {
-                        var translatedSheet = workbook.Worksheets.Add($"{ws.Name}{DEEPL_PLACEHOLDER}{language}");
+                        var translatedSheet = workbook.Worksheets.Add($"{ws.Name}{DEEPL_PLACEHOLDER}{targetLang}");
 
                         foreach (var cell in usedCells)
                         {
-                            await TranslateCell(cell, translatedSheet, delay, language);
+                            await TranslateCell(cell, translatedSheet, delay, targetLang);
                         }
 
                         Console.WriteLine();
@@ -118,7 +118,7 @@ namespace NetDeepL.TranslationWorker.Implementations
             }
         }
 
-        private async Task TranslateCell(ExcelCell cell, IXLWorksheet translatedSheet, int delay, Languages language)
+        private async Task TranslateCell(ExcelCell cell, IXLWorksheet translatedSheet, int delay, Languages targetLanguage)
         {
             translatedSheet.Cell(cell.Address).Style = cell.WrappedCell.Style;
             translatedSheet.Cell(cell.Address).FormulaA1 = cell.WrappedCell.FormulaA1;
@@ -142,7 +142,7 @@ namespace NetDeepL.TranslationWorker.Implementations
                             })
                             .ExecuteAsync(async () =>
                             {
-                                var response = await _deepL.TranslateAsync(cell.Text, language, _options.Value.SourceLanguage);
+                                var response = await _deepL.TranslateAsync(cell.Text, targetLanguage, _options.Value.SourceLanguage);
                                 return response.Text;
                             });
                     }

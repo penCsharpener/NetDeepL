@@ -7,7 +7,6 @@ using NUnit.Framework;
 
 namespace NetDeepL.Tests.IntegrationTests
 {
-
     [TestFixture]
     public class DeepApiTests
     {

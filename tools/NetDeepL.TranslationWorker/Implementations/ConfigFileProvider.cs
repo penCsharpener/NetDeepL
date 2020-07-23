@@ -119,6 +119,12 @@ namespace NetDeepL.TranslationWorker.Implementations
                 }
             }
 
+            if (conf.TimeOutSeconds == 0)
+            {
+                Console.WriteLine("Please specify a timeout for your http requests that allows enough time for the Api to respond.");
+                configFileInvalid = true;
+            }
+
             if (configFileInvalid)
             {
                 Console.WriteLine("There were errors in your configuration. Please correct them and restart the tool.");
