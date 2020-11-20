@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NetDeepL.Abstractions;
 using NetDeepL.Models;
+using NetDeepL.Models.Parameters;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Models;
 using NetDeepL.TranslationWorker.Models.Config;
@@ -142,7 +143,13 @@ namespace NetDeepL.TranslationWorker.Implementations
                             })
                             .ExecuteAsync(async () =>
                             {
-                                var response = await _deepL.TranslateAsync(cell.Text, targetLanguage, _options.Value.SourceLanguage, _options.Value.Formality);
+                                var parameters = new TranslationRequestParameters
+                                {
+                                    Formality = _options.Value.Formality,
+                                    SourceLanguage = _options.Value.SourceLanguage
+                                };
+
+                                var response = await _deepL.TranslateAsync(cell.Text, targetLanguage, parameters);
                                 return response.Text;
                             });
                     }
