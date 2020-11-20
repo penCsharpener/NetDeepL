@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace NetDeepL.TranslationWorker.Tests
@@ -7,12 +8,13 @@ namespace NetDeepL.TranslationWorker.Tests
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
-        public void Test1()
+        public async Task Test1()
         {
-            Assert.Pass();
+
         }
     }
 }
