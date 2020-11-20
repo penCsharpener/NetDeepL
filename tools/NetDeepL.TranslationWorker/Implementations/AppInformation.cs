@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Reflection;
-using System.Collections.Generic;
 using NetDeepL.TranslationWorker.Abstractions;
 using NetDeepL.TranslationWorker.Models.Config;
 
@@ -28,6 +27,6 @@ namespace NetDeepL.TranslationWorker.Implementations
         }
 
         public string GetWorkingDirectory() => _workingDir;
-        
+
     }
 }
