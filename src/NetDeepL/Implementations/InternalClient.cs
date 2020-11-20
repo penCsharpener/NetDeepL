@@ -8,6 +8,7 @@ using NetDeepL.Extensions;
 using NetDeepL.Models;
 using NetDeepL.Models.Internal;
 using NetDeepL.Models.Parameters;
+using NetDeepL.Validation;
 
 namespace NetDeepL.Implementations
 {
@@ -31,14 +32,20 @@ namespace NetDeepL.Implementations
 
         public async Task<InternalTranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters = null)
         {
-            if (targetLanguage == Languages.Undefined)
+            if (!TargetLanguage.IsValid(targetLanguage))
             {
-                throw new ArgumentException("Target language cannot be undefined.");
+                throw new ArgumentException($"Target language '{targetLanguage.ToParameter()}' is invalid.");
+            }
+
+            var sourceLang = parameters?.SourceLanguage ?? Languages.Undefined;
+            if (!SourceLanguage.IsValid(sourceLang))
+            {
+                throw new ArgumentException($"Source language '{sourceLang}' is invalid.");
             }
 
             var dict = new List<KeyValuePair<string, string>>();
             dict.Add(TranslationParameterNames.TEXT, text);
-            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToString());
+            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToParameter());
             if (parameters != null)
             {
                 dict.AddOptionalParameters(parameters);
@@ -51,9 +58,15 @@ namespace NetDeepL.Implementations
 
         public async Task<InternalTranslationReponse> TranslateAsync(IEnumerable<string> texts, Languages targetLanguage, TranslationRequestParameters parameters = null)
         {
-            if (targetLanguage == Languages.Undefined)
+            if (!TargetLanguage.IsValid(targetLanguage))
             {
-                throw new ArgumentException("Target language cannot be undefined.");
+                throw new ArgumentException($"Target language '{targetLanguage.ToParameter()}' cannot be undefined.");
+            }
+
+            var sourceLang = parameters?.SourceLanguage ?? Languages.Undefined;
+            if (!SourceLanguage.IsValid(sourceLang))
+            {
+                throw new ArgumentException($"Source language '{sourceLang}' is invalid.");
             }
 
             var dict = new List<KeyValuePair<string, string>>();
@@ -61,7 +74,7 @@ namespace NetDeepL.Implementations
             {
                 dict.Add(TranslationParameterNames.TEXT, text);
             }
-            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToString());
+            dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToParameter());
             if (parameters != null)
             {
                 dict.AddOptionalParameters(parameters);

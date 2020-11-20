@@ -116,6 +116,16 @@ namespace NetDeepL.Extensions
             }
         }
 
-
+        internal static string ToParameter(this Languages lang)
+        {
+            return lang switch
+            {
+                Languages.EN_GB => "EN-GB",
+                Languages.EN_US => "EN-US",
+                Languages.PT_PT => "PT-PT",
+                Languages.PT_BR => "PT-BR",
+                _ => lang.ToString()
+            };
+        }
     }
 }
