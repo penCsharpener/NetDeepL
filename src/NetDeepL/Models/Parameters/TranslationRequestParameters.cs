@@ -7,6 +7,7 @@ namespace NetDeepL.Models.Parameters
         public Languages SourceLanguage { get; set; } = Languages.Undefined;
         public bool SplitSentences { get; set; } = true;
         public bool PreserveFormatting { get; set; }
+        public Formality Formality { get; set; } = Formality.Default;
         public TagHandlingOptions TagHandling { get; set; } = TagHandlingOptions.None;
         public List<string> NonSplittingTags { get; set; } = new List<string>();
         public bool OutlineDetection { get; set; }

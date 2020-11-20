@@ -51,6 +51,18 @@ namespace NetDeepL.Implementations
             return (await GetClient().TranslateAsync(text, targetLanguage, conf)).ToResponses().FirstOrDefault();
         }
 
+        public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, Languages sourceLanguage = Languages.Undefined, Formality formality = Formality.Default, bool splitSentences = true, bool preserveFormatting = false)
+        {
+            var conf = new TranslationRequestParameters()
+            {
+                SourceLanguage = sourceLanguage,
+                SplitSentences = splitSentences,
+                PreserveFormatting = preserveFormatting,
+                Formality = formality,
+            };
+            return (await GetClient().TranslateAsync(text, targetLanguage, conf)).ToResponses().FirstOrDefault();
+        }
+
         public async Task<TranslationReponse> TranslateAsync(string text, Languages targetLanguage, TranslationRequestParameters parameters)
         {
             return (await GetClient().TranslateAsync(text, targetLanguage, parameters)).ToResponses().FirstOrDefault();

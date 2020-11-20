@@ -87,6 +87,17 @@ namespace NetDeepL.Extensions
             {
                 dict.AddIf(!parameters.OutlineDetection, TranslationParameterNames.OUTLINE_DETECTION, parameters.OutlineDetection ? "1" : "0");
             }
+            if (parameters.Formality != Formality.Default)
+            {
+                if (parameters.Formality == Formality.More)
+                {
+                    dict.Add(TranslationParameterNames.FORMALITY, "more");
+                }
+                if (parameters.Formality == Formality.Less)
+                {
+                    dict.Add(TranslationParameterNames.FORMALITY, "less");
+                }
+            }
             dict.AddIf(parameters.SplittingTags?.Count > 0, TranslationParameterNames.SPLITTING_TAGS, parameters.SplittingTags);
             dict.AddIf(parameters.IgnoreTags?.Count > 0, TranslationParameterNames.IGNORE_TAGS, parameters.IgnoreTags);
 
