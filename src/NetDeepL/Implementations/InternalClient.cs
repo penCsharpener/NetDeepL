@@ -46,6 +46,7 @@ namespace NetDeepL.Implementations
             var dict = new List<KeyValuePair<string, string>>();
             dict.Add(TranslationParameterNames.TEXT, text);
             dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToParameter());
+
             if (parameters != null)
             {
                 dict.AddOptionalParameters(parameters);
@@ -53,6 +54,7 @@ namespace NetDeepL.Implementations
 
             var httpResponse = await _httpClient.SendAsync(GetPostRequestObject($"v2/translate?auth_key={_apiKey}", dict));
             var stream = await httpResponse.Content.ReadAsStreamAsync();
+
             return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
         }
 
@@ -74,6 +76,7 @@ namespace NetDeepL.Implementations
             {
                 dict.Add(TranslationParameterNames.TEXT, text);
             }
+
             dict.Add(TranslationParameterNames.TARGET_LANG, targetLanguage.ToParameter());
             if (parameters != null)
             {
@@ -82,6 +85,7 @@ namespace NetDeepL.Implementations
 
             var httpResponse = await _httpClient.SendAsync(GetPostRequestObject($"v2/translate?auth_key={_apiKey}", dict));
             var stream = await httpResponse.Content.ReadAsStreamAsync();
+
             return await JsonSerializer.DeserializeAsync<InternalTranslationReponse>(stream);
         }
 
@@ -94,6 +98,7 @@ namespace NetDeepL.Implementations
 
             req.Content.Headers.Clear();
             req.Content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
             return req;
         }
     }

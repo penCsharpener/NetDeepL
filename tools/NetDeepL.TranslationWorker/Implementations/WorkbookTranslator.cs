@@ -142,7 +142,7 @@ namespace NetDeepL.TranslationWorker.Implementations
                             })
                             .ExecuteAsync(async () =>
                             {
-                                var response = await _deepL.TranslateAsync(cell.Text, targetLanguage, _options.Value.SourceLanguage);
+                                var response = await _deepL.TranslateAsync(cell.Text, targetLanguage, _options.Value.SourceLanguage, _options.Value.Formality);
                                 return response.Text;
                             });
                     }

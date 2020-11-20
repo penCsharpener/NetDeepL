@@ -15,17 +15,17 @@ namespace NetDeepL.TranslationWorker
             services.AddSingleton<IAppInformation, AppInformation>();
             services.AddSingleton<IWorkbookTranslator, WorkbookTranslator>();
             services.AddTransient<IOptions<ConfigFile>, ConfigFileProvider>();
-            services.AddSingleton(sp =>
+            services.AddSingleton(async sp =>
             {
                 var configProvider = sp.GetService<IConfigFileProvider>();
-                if (configProvider.CreateTemplate().Result)
+                if (await configProvider.CreateTemplate())
                 {
-                    Console.WriteLine("Config templated was generated. Please fill it out.");
+                    Console.WriteLine("Config template was generated. Please fill it in.");
                     Console.ReadLine();
                     Environment.Exit(0);
                 }
                 var conf = configProvider.GetOptionValues();
-                configProvider.ValidateConfigFile().GetAwaiter().GetResult();
+                await configProvider.ValidateConfigFile();
                 return NetDeepL.Implementations.NetDeepL.CreateClient(conf.DeepLApiKey, new NetDeepLOptions(conf.TimeOutSeconds));
             });
         }

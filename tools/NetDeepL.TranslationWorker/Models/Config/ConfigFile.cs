@@ -18,6 +18,7 @@ namespace NetDeepL.TranslationWorker.Models.Config
             LanguagesToTranslate = raw.LanguagesToTranslate.Split(',', System.StringSplitOptions.RemoveEmptyEntries)
                                                             .Select(x => EnumParseWithDefault(x.ToUpper(), Languages.Undefined)).Distinct().ToArray();
             SourceLanguage = EnumParseWithDefault(raw.SourceLanguage.ToUpper(), Languages.Undefined);
+            Formality = EnumParseWithDefault(raw.Formality, Formality.Default);
             DelayMilliseconds = int.TryParse(raw.DelayMilliseconds, out var delay) ? delay : 500;
             var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
             InputPath = string.IsNullOrWhiteSpace(raw.InputPath) ? currentDir : new DirectoryInfo(raw.InputPath);
@@ -28,6 +29,7 @@ namespace NetDeepL.TranslationWorker.Models.Config
         public string DeepLApiKey { get; }
         public Languages[] LanguagesToTranslate { get; }
         public Languages SourceLanguage { get; }
+        public Formality Formality { get; set; }
         public int DelayMilliseconds { get; }
         public DirectoryInfo InputPath { get; }
         public DirectoryInfo OutputPath { get; }
@@ -35,14 +37,12 @@ namespace NetDeepL.TranslationWorker.Models.Config
 
         private T EnumParseWithDefault<T>(string enumText, T defaultValue) where T : struct
         {
-            try
+            if (Enum.TryParse<T>(enumText, true, out T result))
             {
-                return Enum.Parse<T>(enumText);
+                return result;
             }
-            catch
-            {
-                return defaultValue;
-            }
+
+            return defaultValue;
         }
     }
 }
